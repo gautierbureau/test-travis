@@ -19,6 +19,9 @@ install:
   - echo CI $CI
   - BRANCH=$(git rev-parse --abbrev-ref HEAD)
   - echo $(git rev-parse --abbrev-ref HEAD)
+  - git_command=$(./checkout_commit.sh)
+  - echo $git_command
 
 script:
   - echo toto
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; echo sonar-scanner; fi
