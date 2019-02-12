@@ -1,12 +1,8 @@
 dist: trusty
-sudo: required
 
 language: cpp
 
 compiler: g++
-
-services:
-  - docker
 
 install:
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
