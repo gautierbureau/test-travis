@@ -20,4 +20,4 @@ install:
 
 script:
   - echo toto
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; echo sonar-scanner; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then echo sonar-scanner; fi
