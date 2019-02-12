@@ -1,0 +1,10 @@
+foo.cpp.gcov
+foo.gcno
+*.o
+main
+coverage
+report-lcov
+report-gcovr
+*.gcda
+*.gcno
+unittest
