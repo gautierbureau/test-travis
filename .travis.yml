@@ -1,8 +1,15 @@
 dist: trusty
+sudo: required
 
 language: cpp
 
 compiler: g++
+
+addons:
+  sonarcloud:
+    organization: "gautierbureau-github"
+    token:
+      secure: ${SONAR_TOKEN}
 
 install:
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
@@ -17,7 +24,10 @@ install:
   - echo $(git rev-parse --abbrev-ref HEAD)
   - git_command=$(./checkout_commit.sh)
   - echo $git_command
+  - (cd /tmp;wget https://github.com/google/googletest/archive/release-1.8.1.tar.gz;tar -xzf release-1.8.1.tar.gz;cd googletest-release-1.8.1;mkdir build;cd build;cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON ..;make;sudo make install)
 
 script:
-  - echo toto
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then echo sonar-scanner; fi
+  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+  - ./compile.sh build-tests
+  - ls coverage
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then sonar-scanner; fi
