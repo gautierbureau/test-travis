@@ -20,17 +20,21 @@ elif [ "$1" = "build-tests" ]; then
   ./unittest
 
   # Lcov
-  # lcov --directory . --capture --output-file coverage.info.unittest
-  # lcov --extract coverage.info.unittest '*test-travis/foo*' --output-file coverage.info.unittest.filtered
-  # lcov --remove coverage.info.unittest '/usr*' '*test-travis/test*' --output-file coverage.info.unittest.filtered
-  # cat coverage.info.unittest.filtered >> coverage.info
-  # mkdir -p report-lcov
-  # genhtml --no-function-coverage -o report-lcov coverage.info
+  if [ -z "$TRAVIS" ]; then
+    lcov --directory . --capture --output-file coverage.info.unittest
+    lcov --extract coverage.info.unittest '*test-travis/foo*' --output-file coverage.info.unittest.filtered
+    lcov --remove coverage.info.unittest '/usr*' '*test-travis/test*' --output-file coverage.info.unittest.filtered
+    cat coverage.info.unittest.filtered >> coverage.info
+    mkdir -p report-lcov
+    genhtml --no-function-coverage -o report-lcov coverage.info
+  fi
 
   # Gcovr
-  # mkdir -p report-gcovr/gcov
-  # gcovr $PWD --root $PWD --html --html-details --output report-gcovr/index.html --keep --filter=.*foo.*
-  # mv *.gcov report-gcovr/gcov
+  if [ -z "$TRAVIS" ]; then
+    mkdir -p report-gcovr/gcov
+    gcovr $PWD --root $PWD --html --html-details --output report-gcovr/index.html --keep --filter=.*foo.*
+    mv *.gcov report-gcovr/gcov
+  fi
 
   # My way
   mkdir -p coverage
@@ -42,8 +46,10 @@ elif [ "$1" = "build-tests" ]; then
   rm -f \#usr\#*
   mv *.gcov coverage
   rm -f coverage/test*
-  #mkdir -p coverage/gcovr
-  #gcovr $PWD --root $PWD --html --html-details --use-gcov-files --object-directory coverage --output coverage/gcovr/index.html --keep --filter=.*foo.*
+  mkdir -p coverage/gcovr-report
+  if [ -z "$TRAVIS" ]; then
+    gcovr $PWD --root $PWD --html --html-details --use-gcov-files --object-directory coverage --output coverage/gcovr-report/index.html --keep --filter=.*foo.*
+  fi
   if [ ! -z "$TRAVIS" ]; then
     GCOVR_OPTION=""
   else
