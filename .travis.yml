@@ -29,10 +29,7 @@ install:
 
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-  - gcovr --help
-  - gcovr --version
   - ./compile.sh build-tests
   - ls coverage
   # - cat coverage/report.xml
-  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
   - sonar-scanner
