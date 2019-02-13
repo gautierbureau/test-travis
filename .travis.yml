@@ -30,5 +30,4 @@ script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   - ./compile.sh build-tests
   - ls coverage
-  - mkdir bw-output
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then sonar-scanner -X; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all;sonar-scanner -X; fi
