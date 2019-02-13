@@ -32,4 +32,5 @@ script:
   - ./compile.sh build-tests
   - ls coverage
   # - cat coverage/report.xml
+  - build-wrapper-linux-x86-64 --out-dir bw-output ./build_sonar.sh
   - sonar-scanner
