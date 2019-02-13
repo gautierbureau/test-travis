@@ -15,12 +15,12 @@ elif [ "$1" = "build-tests" ]; then
   # after I had trouble with gcov that was not able to generate the full path of the file, and then putting them in a different
   # folder caused problems to find files correctly, in gcno file name was just File 'foo.cpp' and not File '/home/bureaugau/Codes/test-travis/foo.cpp'
   # Forcing to use full path saved the problem, in cmake I belive we don't have the problem
-  g++ -c -g -O0 -fprofile-arcs -ftest-coverage --coverage $(realpath foo.cpp) -o $(basename $(realpath foo.cpp) .cpp).o
+  g++ -c -g -O0 --coverage $(realpath foo.cpp) -o $(basename $(realpath foo.cpp) .cpp).o
   g++ -c -g -O0 $(realpath main.cpp) -o $(basename $(realpath main.cpp) .cpp).o
-  g++ foo.o main.o -fprofile-arcs -ftest-coverage --coverage -o main
+  g++ foo.o main.o --coverage -o main
 
-  g++ -c -g -O0 -fprofile-arcs -ftest-coverage --coverage $(realpath test.cpp) -o $(basename $(realpath test.cpp) .cpp).o
-  g++ -g -O0 -fprofile-arcs -ftest-coverage --coverage $(realpath test.o) $(realpath foo.o) -o $PWD/unittest -lgtest -lgtest_main
+  g++ -c -g -O0 --coverage $(realpath test.cpp) -o $(basename $(realpath test.cpp) .cpp).o
+  g++ -g -O0 --coverage $(realpath test.o) $(realpath foo.o) -o $PWD/unittest -lgtest -lgtest_main
   ./unittest
 
   # Lcov
@@ -51,6 +51,8 @@ elif [ "$1" = "build-tests" ]; then
   rm -f \#usr\#*
   rm -f $(find . -name "*test.cpp.gcov")
   cd ..
+  # Comment because of cxx plugin not working on sonarcloud (report.xml wanted by this plugin)
+  # L'autre est un test sur gcovr pour se servir des fichiers gcov que j'ai créée au dessus, ce qui diffère du premier appel gcov ou les .gcov ne sont encore créés
   # mkdir -p coverage/gcovr-report
   # if [ -z "$TRAVIS" ]; then
   #   gcovr $PWD --root $PWD --html --html-details --use-gcov-files --object-directory coverage --output coverage/gcovr-report/index.html --keep --filter=.*foo.*
