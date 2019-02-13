@@ -8,3 +8,6 @@ report-gcovr
 *.gcda
 *.gcno
 unittest
+coverage.info
+coverage.info.unittest
+coverage.info.unittest.filtered

@@ -12,6 +12,7 @@ addons:
       secure: ${SONAR_TOKEN}
 
 install:
+  - sudo apt-get install gcovr
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
   - echo $CHECKOUT_COMMIT
   - echo TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST
@@ -28,6 +29,9 @@ install:
 
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+  - gcovr --help
+  - gcovr --version
   - ./compile.sh build-tests
   - ls coverage
+  - cat coverage/report.xml
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all;sonar-scanner; fi
