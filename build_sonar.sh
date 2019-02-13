@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ./compile.sh clean
-./compile.sh build
+./compile.sh build-tests
 
 RC=$?
 
