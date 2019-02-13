@@ -44,6 +44,12 @@ elif [ "$1" = "build-tests" ]; then
   rm -f coverage/test*
   #mkdir -p coverage/gcovr
   #gcovr $PWD --root $PWD --html --html-details --use-gcov-files --object-directory coverage --output coverage/gcovr/index.html --keep --filter=.*foo.*
+  if [ ! -z "$TRAVIS" ]; then
+    GCOVR_OPTION=""
+  else
+    GCOVR_OPTION="--use-gcov-files"
+  fi
+  gcovr -r $PWD --xml --keep $GCOVR_OPTION --object-directory=$PWD/coverage --filter=.*foo.* > coverage/report.xml
 elif [ "$1" = "clean" ]; then
   rm -f *.o
   rm -f *.gcno
