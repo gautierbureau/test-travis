@@ -33,5 +33,5 @@ script:
   - gcovr --version
   - ./compile.sh build-tests
   - ls coverage
-  - cat coverage/report.xml
+  # - cat coverage/report.xml
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then build-wrapper-linux-x86-64 --out-dir bw-output make clean all;sonar-scanner; fi

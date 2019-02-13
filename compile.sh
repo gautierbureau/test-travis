@@ -11,12 +11,16 @@ if [ "$1" = "build" ]; then
   g++ foo.o main.o -o main
   ./main
 elif [ "$1" = "build-tests" ]; then
-  g++ -c -g -O0 --coverage foo.cpp -o foo.o
-  g++ -c -g -O0 main.cpp -o main.o
-  g++ foo.o main.o --coverage -o main
+  # Warning I compiled with   g++ -c -g -O0 -fprofile-arcs -ftest-coverage --coverage foo.cpp -o foo.o but
+  # after I had trouble with gcov that was not able to generate the full path of the file, and then putting them in a different
+  # folder caused problems to find files correctly, in gcno file name was just File 'foo.cpp' and not File '/home/bureaugau/Codes/test-travis/foo.cpp'
+  # Forcing to use full path saved the problem, in cmake I belive we don't have the problem
+  g++ -c -g -O0 -fprofile-arcs -ftest-coverage --coverage $(realpath foo.cpp) -o $(basename $(realpath foo.cpp) .cpp).o
+  g++ -c -g -O0 $(realpath main.cpp) -o $(basename $(realpath main.cpp) .cpp).o
+  g++ foo.o main.o -fprofile-arcs -ftest-coverage --coverage -o main
 
-  g++ -c -g -O0 --coverage test.cpp -o test.o
-  g++ -g -O0 --coverage test.o foo.o -o unittest -lgtest -lgtest_main
+  g++ -c -g -O0 -fprofile-arcs -ftest-coverage --coverage $(realpath test.cpp) -o $(basename $(realpath test.cpp) .cpp).o
+  g++ -g -O0 -fprofile-arcs -ftest-coverage --coverage $(realpath test.o) $(realpath foo.o) -o $PWD/unittest -lgtest -lgtest_main
   ./unittest
 
   # Lcov
@@ -38,24 +42,25 @@ elif [ "$1" = "build-tests" ]; then
 
   # My way
   mkdir -p coverage
-  for file in $(find . -name "*.gcno"); do
+  cd coverage
+  for file in $(find .. -name "*.gcno"); do
     cpp_file_name=$(basename $file .gcno)
-    cpp_file=$(find . -name "$cpp_file_name.cpp") # In Cmake cpp is not need as it generates .cpp.gcno files
-    gcov -pb $cpp_file -o $file
+    cpp_file=$(find .. -name "$cpp_file_name.cpp") # In Cmake cpp is not need as it generates .cpp.gcno files
+    gcov -pb $(realpath $cpp_file) -o $(realpath $file)
   done
   rm -f \#usr\#*
-  mv *.gcov coverage
-  rm -f coverage/test*
-  mkdir -p coverage/gcovr-report
-  if [ -z "$TRAVIS" ]; then
-    gcovr $PWD --root $PWD --html --html-details --use-gcov-files --object-directory coverage --output coverage/gcovr-report/index.html --keep --filter=.*foo.*
-  fi
-  if [ ! -z "$TRAVIS" ]; then
-    GCOVR_OPTION=""
-  else
-    GCOVR_OPTION="--use-gcov-files"
-  fi
-  gcovr -r $PWD --xml --keep $GCOVR_OPTION --object-directory=$PWD/coverage --filter=.*foo.* > coverage/report.xml
+  rm -f $(find . -name "*test.cpp.gcov")
+  cd ..
+  # mkdir -p coverage/gcovr-report
+  # if [ -z "$TRAVIS" ]; then
+  #   gcovr $PWD --root $PWD --html --html-details --use-gcov-files --object-directory coverage --output coverage/gcovr-report/index.html --keep --filter=.*foo.*
+  # fi
+  # if [ ! -z "$TRAVIS" ]; then
+  #   GCOVR_OPTION=""
+  # else
+  #   GCOVR_OPTION="--use-gcov-files"
+  # fi
+  #gcovr -r $PWD --xml --keep $GCOVR_OPTION --object-directory=$PWD/coverage --filter=.*foo.* > coverage/report.xml
 elif [ "$1" = "clean" ]; then
   rm -f *.o
   rm -f *.gcno
