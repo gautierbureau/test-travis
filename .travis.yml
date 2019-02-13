@@ -12,7 +12,7 @@ addons:
       secure: ${SONAR_TOKEN}
 
 install:
-  - sudo apt-get install gcovr
+  - sudo apt-get install gcovr realpath
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
   - echo $CHECKOUT_COMMIT
   - echo TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST
