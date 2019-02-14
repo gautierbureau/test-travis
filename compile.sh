@@ -24,14 +24,14 @@ elif [ "$1" = "build-tests" ]; then
   ./unittest
 
   # Lcov
-  if [ -z "$TRAVIS" ]; then
+  #if [ -z "$TRAVIS" ]; then
     lcov --directory . --capture --output-file coverage.info.unittest
     lcov --extract coverage.info.unittest '*test-travis/foo*' --output-file coverage.info.unittest.filtered
     lcov --remove coverage.info.unittest '/usr*' '*test-travis/test*' --output-file coverage.info.unittest.filtered
     cat coverage.info.unittest.filtered >> coverage.info
     mkdir -p report-lcov
     genhtml --no-function-coverage -o report-lcov coverage.info
-  fi
+  #fi
 
   # Gcovr
   if [ -z "$TRAVIS" ]; then
