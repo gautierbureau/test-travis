@@ -72,7 +72,6 @@ elif [ "$1" = "clean" ]; then
   rm -rf coverage
   rm -f coverage.info*
   rm -f *.gcov
-  rm -rf bw-output*
   if [ -f "main" ]; then rm main; fi
   if [ -f "unittest" ]; then rm unittest; fi
 else
