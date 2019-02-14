@@ -12,7 +12,8 @@ addons:
       secure: ${SONAR_TOKEN}
 
 install:
-  - sudo apt-get install gcovr realpath
+  - sudo apt-get install gcovr realpath lcov genhtml
+  - gem install coveralls-lcov
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
   - echo $CHECKOUT_COMMIT
   - echo TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST
@@ -35,3 +36,4 @@ script:
   - mkdir bw-output
   - build-wrapper-linux-x86-64 --out-dir bw-output ./build_sonar.sh
   - sonar-scanner
+  - coveralls-lcov -t $COVERALLS_TOKEN coverage.info
