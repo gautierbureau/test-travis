@@ -33,7 +33,6 @@ script:
   - ./compile.sh build-tests
   - ls coverage
   # - cat coverage/report.xml
-  - mkdir bw-output
   - build-wrapper-linux-x86-64 --out-dir bw-output ./build_sonar.sh
   - sonar-scanner
   - coveralls-lcov -t $COVERALLS_TOKEN coverage.info
