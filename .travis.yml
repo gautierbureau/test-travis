@@ -12,7 +12,7 @@ addons:
       secure: ${SONAR_TOKEN}
 
 install:
-  - sudo apt-get install gcovr realpath lcov genhtml
+  - sudo apt-get install gcovr realpath lcov
   - gem install coveralls-lcov
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
   - echo $CHECKOUT_COMMIT
