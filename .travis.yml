@@ -12,6 +12,9 @@ addons:
       secure: ${SONAR_TOKEN}
 
 install:
+  # We checkout the right commit to test (either a push or a merge test during a pull request)
+  # We could also either checkout TRAVIS_BRANCH for the push
+  # or use git fetch origin +refs/pull/PR_NUMBER/merge and git checkout FETCH_HEAD for the merge test of a pull request
   - sudo apt-get install gcovr realpath lcov
   - gem install coveralls-lcov
   - CHECKOUT_COMMIT=$(git rev-parse HEAD)
