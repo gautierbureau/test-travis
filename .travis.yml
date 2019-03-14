@@ -40,5 +40,5 @@ script:
   - sonar-scanner
   - coveralls-lcov -t $COVERALLS_TOKEN coverage.info
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then curl -v --header "Content-Type":" application/json" -X POST --data '{"dynawo":"Update"}' https://cloud.docker.com/api/build/v1/source/$DOCKER_HUB_TOKEN1/trigger/$DOCKER_HUB_TOKEN2/call/; fi
+# after_success:
+#   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_EVENT_TYPE" = "push" ]; then curl -v --header "Content-Type":" application/json" -X POST --data '{"dynawo":"Update"}' https://cloud.docker.com/api/build/v1/source/$DOCKER_HUB_TOKEN1/trigger/$DOCKER_HUB_TOKEN2/call/; fi
