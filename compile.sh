@@ -9,8 +9,7 @@ if [ "$1" = "build" ]; then
   g++ -c -g -O0 foo.cpp -o foo.o
   g++ -c -g -O0 main.cpp -o main.o
   g++ foo.o main.o -o main
-  exit 1
-  # ./main
+  ./main
 elif [ "$1" = "build-tests" ]; then
   # Warning I compiled with   g++ -c -g -O0 -fprofile-arcs -ftest-coverage --coverage foo.cpp -o foo.o but
   # after I had trouble with gcov that was not able to generate the full path of the file, and then putting them in a different
